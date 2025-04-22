@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button{
+            color: rgb(245, 237, 237);
+            background-color: rgb(24, 164, 164);
+            
+        }
+        body{
+            text-align: center;
+        }
+        #time{
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>THIS IS A SIMPLE STOPWATCH</h1>
+    <div id="time">00:00:00</div>
+  <button onclick="start()">Start</button>
+  <button onclick="pause()">Pause</button>
+  <button onclick="reset()">Reset</button>
+  <button onclick="lap()">Lap</button>
+
+    <ul id="laps"></ul>
+
+    <script>
+        let startTime, interval;
+    let elapsed = 0;
+
+    function updateDisplay() {
+      let time = Date.now() - startTime + elapsed;
+      let seconds = Math.floor(time / 1000) % 60;
+      let minutes = Math.floor(time / 60000) % 60;
+      let hours = Math.floor(time / 3600000);
+      document.getElementById("time").textContent =
+        String(hours).padStart(2, '0') + ':' +
+        String(minutes).padStart(2, '0') + ':' +
+        String(seconds).padStart(2, '0');
+    }
+
+    function start() {
+      if (!interval) {
+        startTime = Date.now();
+        interval = setInterval(updateDisplay, 500);
+      }
+    }
+
+    function pause() {
+      if (interval) {
+        clearInterval(interval);
+        elapsed += Date.now() - startTime;
+        interval = null;
+      }
+    }
+
+    function reset() {
+      clearInterval(interval);
+      interval = null;
+      elapsed = 0;
+      document.getElementById("time").textContent = "00:00:00";
+      document.getElementById("laps").innerHTML = "";
+    }
+
+    function lap() {
+      if (interval) {
+        const lapTime = document.getElementById("time").textContent;
+        const li = document.createElement("li");
+        li.textContent = lapTime;
+        document.getElementById("laps").appendChild(li);
+      }
+    }
+
+    </script>
+</body>
+</html>
